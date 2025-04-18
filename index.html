@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>AASHI IPTV</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #fff;
+      --accent: #00ffc8;
+      --card-bg: #1a1a1a;
+      --sidebar-width: 250px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --text: #000;
+      --accent: #007aff;
+      --card-bg: #ffffff;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px 20px 20px calc(var(--sidebar-width) + 20px);
+      text-align: center;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: var(--accent);
+    }
+
+    .search-bar {
+      padding: 10px;
+      width: 300px;
+      max-width: 90%;
+      font-size: 16px;
+      margin: 20px auto;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent);
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .channel-card {
+      background: var(--card-bg);
+      padding: 10px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      transition: transform 0.2s;
+      position: relative;
+    }
+
+    .channel-card:hover {
+      transform: scale(1.05);
+      border-color: var(--accent);
+    }
+
+    .channel-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .channel-card span {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--card-bg);
+      padding: 20px 10px;
+      overflow-y: auto;
+      z-index: 100;
+      border-right: 1px solid var(--accent);
+    }
+
+    .sidebar h2 {
+      color: var(--accent);
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--accent);
+    }
+
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .category-item {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-align: left;
+    }
+
+    .category-item:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .category-item.active {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: bold;
+    }
+
+    /* Splash screen style */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .splash-screen video {
+      width: 80%;
+      max-width: 800px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 255, 200, 0.9);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 20%;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar with categories -->
+  <div class="sidebar">
+    <h2>Categories</h2>
+    <ul class="category-list" id="categoryList">
+      <li class="category-item active" data-category="All">All Channels</li>
+      <li class="category-item" data-category="Favorites">❤️ Favorites</li>
+      <li class="category-item" data-category="Animation">Animation</li>
+      <li class="category-item" data-category="Auto">Auto</li>
+      <li class="category-item" data-category="Business">Business</li>
+      <li class="category-item" data-category="Classic">Classic</li>
+      <li class="category-item" data-category="Comedy">Comedy</li>
+      <li class="category-item" data-category="Cooking">Cooking</li>
+      <li class="category-item" data-category="Culture">Culture</li>
+      <li class="category-item" data-category="Documentary">Documentary</li>
+      <li class="category-item" data-category="Education">Education</li>
+      <li class="category-item" data-category="Entertainment">Entertainment</li>
+      <li class="category-item" data-category="Family">Family</li>
+      <li class="category-item" data-category="General">General</li>
+      <li class="category-item" data-category="Kids">Kids</li>
+      <li class="category-item" data-category="Legislative">Legislative</li>
+      <li class="category-item" data-category="Lifestyle">Lifestyle</li>
+      <li class="category-item" data-category="Movies">Movies</li>
+      <li class="category-item" data-category="Music">Music</li>
+      <li class="category-item" data-category="News">News</li>
+      <li class="category-item" data-category="Outdoor">Outdoor</li>
+      <li class="category-item" data-category="Relax">Relax</li>
+      <li class="category-item" data-category="Religious">Religious</li>
+      <li class="category-item" data-category="Science">Science</li>
+      <li class="category-item" data-category="Series">Series</li>
+      <li class="category-item" data-category="Shop">Shop</li>
+      <li class="category-item" data-category="Sports">Sports</li>
+      <li class="category-item" data-category="Travel">Travel</li>
+      <li class="category-item" data-category="Weather">Weather</li>
+      <li class="category-item" data-category="XXX">XXX</li>
+      <li class="category-item" data-category="Undefined">Undefined</li>
+    </ul>
+  </div>
+
+  <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+  <h1>📺 AASHI IPTV</h1>
+
+  <input class="search-bar" id="search" placeholder="Search channels..." />
+
+  <div class="channel-grid" id="channelGrid"></div>
+
+  <!-- Splash screen for the video player -->
+  <div class="splash-screen" id="splashScreen">
+    <button class="close-btn" onclick="closeSplash()">✖</button>
+    <video id="videoPlayer" controls></video>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const grid = document.getElementById("channelGrid");
+    const searchInput = document.getElementById("search");
+    const categoryItems = document.querySelectorAll(".category-item");
+    const video = document.getElementById("videoPlayer");
+    const splashScreen = document.getElementById("splashScreen");
+
+    let hls;
+    let channels = [];
+    let filteredChannels = [];
+    let currentCategory = "All";
+    let displayedChannels = 24; // Number of channels initially shown
+
+    async function loadChannels() {
+      const res = await fetch("https://iptv-org.github.io/iptv/index.m3u");
+      const m3uData = await res.text();
+      
+      // Parse the M3U data into channel objects
+      channels = parseM3U(m3uData);
+      filteredChannels = channels; // Initially show all channels
+      renderChannels();
+    }
+
+    function parseM3U(m3uData) {
+      const lines = m3uData.split('\n');
+      const channelList = [];
+      let currentChannel = null;
+
+      lines.forEach(line => {
+        if (line.startsWith("#EXTINF")) {
+          const name = line.split(",")[1].trim();
+          // Extract category from the line if available
+          const categoryMatch = line.match(/group-title="([^"]*)"/);
+          const category = categoryMatch ? categoryMatch[1] : 'Undefined';
+          currentChannel = { name, category };
+        } else if (line.startsWith("http")) {
+          currentChannel.url = line.trim();
+          currentChannel.logo = `https://via.placeholder.com/15000`;  // Use placeholder logo or get a real logo from API
+          channelList.push(currentChannel);
+          currentChannel = null;
+        }
+      });
+
+      return channelList;
+    }
+
+    function renderChannels() {
+      grid.innerHTML = "";
+
+      const channelsToDisplay = filteredChannels.slice(0, displayedChannels);
+
+      channelsToDisplay.forEach(ch => {
+        const card = document.createElement("div");
+        card.className = "channel-card";
+        card.innerHTML = `
+          <img src="${ch.logo}" alt="${ch.name}" />
+          <span>${ch.name}</span>
+        `;
+
+        card.onclick = () => playStream(ch.url);
+        grid.appendChild(card);
+      });
+    }
+
+    function playStream(url) {
+      if (hls) hls.destroy();
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = url;
+        video.addEventListener("loadedmetadata", () => video.play());
+      } else {
+        alert("Your browser doesn't support HLS");
+      }
+      splashScreen.style.display = 'flex';
+    }
+
+    function closeSplash() {
+      splashScreen.style.display = 'none';
+      video.pause();
+    }
+
+    window.addEventListener("scroll", () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+        // User is near the bottom of the page
+        displayedChannels += 24; // Load more channels
+        renderChannels();
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      const searchText = searchInput.value.toLowerCase();
+      filteredChannels = channels.filter(ch => ch.name.toLowerCase().includes(searchText));
+      renderChannels();
+    });
+
+    // Add event listeners for sidebar category items
+    categoryItems.forEach(item => {
+      item.addEventListener("click", () => {
+        categoryItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+        currentCategory = item.dataset.category;
+
+        if (currentCategory === "All") {
+          filteredChannels = channels;
+        } else {
+          filteredChannels = channels.filter(ch => ch.category === currentCategory);
+        }
+
+        displayedChannels = 24; // Reset to initial 24 channels per category
+        renderChannels();
+      });
+    });
+
+    // Theme toggle function
+    function toggleTheme() {
+      const root = document.documentElement;
+      const current = root.getAttribute("data-theme");
+      const newTheme = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    }
+
+    // Restore theme on page load
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+
+    restoreTheme(); // Ensure correct theme on load
+    loadChannels();
+  </script>
+</body>
+</html>
